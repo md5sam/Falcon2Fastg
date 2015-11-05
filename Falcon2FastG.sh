@@ -3,8 +3,6 @@
 ### Dependencies : seqtk, samtools
 ### CAUTION : removes existing fastg and intermediate file in directory
 
-rm *.fastg
-rm part*
 
 if [ $# -ne 2 ]
 then

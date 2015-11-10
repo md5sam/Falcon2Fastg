@@ -28,6 +28,8 @@ Length record in FASTG header set to a constant "500". However, this does not se
 
 ### Output : 
 
+Output of Bandage visualization of the converted FASTG file from a Falcon assembly. Only the edges used in the string graph ("G" flagged in sg_edges_list) were used for this visualization.
+
 ![Alt text](/img/Falcon2Fastg_after_bandage.png?raw=true "Falcon2Fastg after Bandage")
 
 

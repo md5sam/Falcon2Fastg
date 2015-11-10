@@ -8,9 +8,9 @@ This software converts the results of a PacBio assembly using Falcon, to a FASTG
 
 Run it in the same directory as a Falcon assembly. It needs the following input files:
 
-* formatted_preads4falcon.fasta in SINGLE LINE fasta form (multi line preads4falcon.fasta is available in output directory of FALCON. This needs to be converted)
+* formatted_preads4falcon.fasta in SINGLE LINE fasta form (multi line preads4falcon.fasta is available in output directory of Falcon. This needs to be converted)
 
-* sg_edges_list (available from output dir of FALCON)
+* sg_edges_list (available from output dir of Falcon)
 
 
 ### Dependencies :

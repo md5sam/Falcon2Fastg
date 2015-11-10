@@ -11,29 +11,21 @@ all_source_nodes = []
 sys.stdout = open('intmdt_NodeMode_out.fastg', 'w')
 
 def create_read_pair_tuples () :
-    #list_of_tuples = []
     with open("sg_edges_list") as sg_entries:
         read_pairs_TMI = csv.reader(sg_entries, delimiter=' ')
         for row in read_pairs_TMI :
-	    #print (row[1])[:-2]
 	    read_pair_tuple = ((row[0])[:-2],(row[1])[:-2]) 	
-            #print type(read_pair_tuple)
             list_of_tuples.append(read_pair_tuple)
     list_of_tuples.sort()	    
-    #print list_of_tuples[0]	
-
-
 
 def collapse_ctg_list() :
     for key, sink_group in groupby(list_of_tuples, lambda x: x[0]):
 	source_sink_list = []
 	source_sink_list.append(key)
 	for sink_node in sink_group:
-	    #print (thing[1])
 	    source_sink_list.append(sink_node[1])
 	    
 	all_nodes_list.append(source_sink_list)
-    #print all_nodes_list	
 
 
 def corresponding_FASTA(record_name): 
@@ -41,14 +33,11 @@ def corresponding_FASTA(record_name):
     fp = open("formatted_preads4falcon.fasta")
     for line in fp : 
 	if line[0]==">" :
-            #print line[1:-1]
-	    #print record_name
 	    if line[1:-1] == record_name :
 	        FASTA_flag = "found"
 	else :
 	    if FASTA_flag == "found":
 	        sys.stdout.write(line)
-		#print
 		fp.close()
                 return 
 
@@ -63,7 +52,6 @@ def make_header() :
 		all_source_nodes.append(node)
 		header.append(">NODE_"+node+"_length_"+"500"+"_cov_50:")
 		flag = "sink"
-	    #row_node_list.append(node)
     	    else : 
 	        header.append("NODE_"+node+"_length_"+"500"+"_cov_50,")    
 	for item in header :

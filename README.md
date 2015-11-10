@@ -1,13 +1,35 @@
 Usage : python Falcon2FastG.py
 
 
-Requires : 
+Required files : 
 
-preads4falcon.fasta in single_line FASTA form (available in output directory of FALCON)
+formatted_preads4falcon.fasta in SINGLE LINE fasta form (multi line preads4falcon.fasta is available in output directory of FALCON. This needs to be converted)
 
 sg_edges_list (available from output dir of FALCON)
 
+
+Tool requirements :
+
 seqtk (available at https://github.com/lh3/seqtk)
+
+
+
+Caveats : 
+
+Faked a constant coverage of "50" because Bandage expects coverage information in the FASTG record headers.
+
+Length record in FASTG header set to a constant "500". However, this does not seem to affect Bandage, which correctly calculates the read length
+
+
+
+
+
+
+
+
+
+
+
 
 
 

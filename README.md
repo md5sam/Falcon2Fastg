@@ -26,7 +26,9 @@ Length record in FASTG header set to a constant "500". However, this does not se
 
 
 
+### Output : 
 
+![Alt text](/img/Falcon2Fastg_after_bandage.png?raw=true "Falcon2Fastg after Bandage")
 
 
 

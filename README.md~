@@ -33,9 +33,9 @@ Length record in FASTG header set to a constant "500". However, this does not se
 
 
 
-Usage for utils/graph_of_overlaps.sh : 
+Usage for deprecated_overlap_converter.sh : 
 
-./graph_of_overlaps.sh edges_list reads.fasta
+./deprecated_overlap_converter.sh edges_list reads.fasta
 
 Caveats :
 

@@ -1,20 +1,24 @@
-Usage : python Falcon2FastG.py
+# Falcon2Fastg 
+
+This software converts the results of a PacBio assembly using Falcon, to a FASTG graph that can be visualized using Bandage.
+
+### Usage
+
+    python Falcon2FastG.py
+
+Run it in the same directory as a Falcon assembly. It needs the following input files:
+
+* formatted_preads4falcon.fasta in SINGLE LINE fasta form (multi line preads4falcon.fasta is available in output directory of FALCON. This needs to be converted)
+
+* sg_edges_list (available from output dir of FALCON)
 
 
-Required files : 
-
-formatted_preads4falcon.fasta in SINGLE LINE fasta form (multi line preads4falcon.fasta is available in output directory of FALCON. This needs to be converted)
-
-sg_edges_list (available from output dir of FALCON)
-
-
-Tool requirements :
+### Dependencies :
 
 seqtk (available at https://github.com/lh3/seqtk)
 
 
-
-Caveats : 
+### Caveats : 
 
 Faked a constant coverage of "50" because Bandage expects coverage information in the FASTG record headers.
 
@@ -30,7 +34,7 @@ Length record in FASTG header set to a constant "500". However, this does not se
 
 
 
-
+## Other tools
 
 
 Usage for utils/graph_of_overlaps.sh : 

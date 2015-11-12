@@ -6,16 +6,16 @@ This software converts the results of a PacBio assembly using Falcon, to a FASTG
 
     python Falcon2FastG.py
 
-Run it in the same directory as a Falcon assembly. It needs the following input files:
+Run it in the output directory of Falcon assembly (2-asm-falcon). It needs the following input files:
 
-* formatted_preads4falcon.fasta in SINGLE LINE fasta form (multi line preads4falcon.fasta is available in output directory of Falcon. This needs to be converted)
+* preads4falcon.fasta
 
-* sg_edges_list (available from output dir of Falcon)
+* sg_edges_list 
 
 
 ### Dependencies :
 
-seqtk (available at https://github.com/lh3/seqtk)
+Biopython (available at http://biopython.org/wiki/Download)
 
 
 ### Caveats : 

@@ -2,13 +2,28 @@ import sys
 import os
 import csv
 from itertools import groupby
-
+from Bio import SeqIO
+from Bio.SeqIO import FastaIO
 
 list_of_tuples = []
 all_nodes_list = []
 all_source_nodes = []
 
 sys.stdout = open('intmdt_NodeMode_out.fastg', 'w')
+
+
+def convert_multiline_to_single_line_FASTA () :
+    sequences = [] 
+    input_handle = open("preads4falcon.fasta", "rU")
+
+    for record in SeqIO.parse(input_handle, "fasta"):
+	sequences.append(record)
+    
+    output_handle = open("formatted_preads4falcon.fasta","w")
+    fasta_out = FastaIO.FastaWriter(output_handle, wrap=None)
+    fasta_out.write_file(sequences)
+    output_handle.close()
+
 
 def create_read_pair_tuples () :
     with open("sg_edges_list") as sg_entries:
@@ -17,6 +32,7 @@ def create_read_pair_tuples () :
 	    read_pair_tuple = ((row[0])[:-2],(row[1])[:-2]) 	
             list_of_tuples.append(read_pair_tuple)
     list_of_tuples.sort()	    
+
 
 def collapse_ctg_list() :
     for key, sink_group in groupby(list_of_tuples, lambda x: x[0]):
@@ -41,6 +57,7 @@ def corresponding_FASTA(record_name):
 		fp.close()
                 return 
 
+
 def make_header() :
     for source_to_sinks in all_nodes_list : 
 	header = []
@@ -59,6 +76,7 @@ def make_header() :
 	print 
 	corresponding_FASTA(source)
 
+
 def print_non_sources() :
     fp_non = open("formatted_preads4falcon.fasta")
     NON_flag = "non_source"
@@ -75,17 +93,15 @@ def print_non_sources() :
 		    print line[:-1] 
     fp_non.close()     
 
-	    
 
 
+convert_multiline_to_single_line_FASTA ()
 create_read_pair_tuples()
 collapse_ctg_list()
 make_header()
 print_non_sources()
 
-os.system("sed 's/,$/;/' intmdt_NodeMode_out.fastg > intmdt_NMout_SemiCol.fastg")
-
-os.system("seqtk seq -l 80 intmdt_NMout_SemiCol.fastg > FINAL_nm.fastg")
+os.system("sed 's/,$/;/' intmdt_NodeMode_out.fastg > FINAL.fastg")
 
 os.system("rm intmdt*")
 

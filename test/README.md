@@ -23,7 +23,7 @@ Optionally, this directory also contains a reference.fasta which is the perfect 
 
 4. visualization/ contains a screenshot of viewing this data with Bandage
 
-![Alt text](/visualization/3nodes.png?raw=true "Example data after Bandage")
+![Alt text](/test/visualization/3nodes.png?raw=true "Example data after Bandage")
 
 
 

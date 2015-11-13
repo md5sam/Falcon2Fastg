@@ -40,7 +40,7 @@ The figure above represents a visualization of the E. coli test dataset distribu
 The figure below uses the same E. coli dataset, however the Repeat and Transitive Reducible edges are removed to give a single contiguous graph (along with multiple single edges), which Falcon outputs as a single contig. 
 
 
-![Alt text](/img/ecoli_Allnodes.png?raw=true "Ecoli 'G' edges fastg after Bandage")
+![Alt text](/img/ecoli_Gnodes.png?raw=true "Ecoli 'G' edges fastg after Bandage")
 
 
 

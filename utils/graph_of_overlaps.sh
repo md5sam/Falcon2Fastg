@@ -1,6 +1,9 @@
-### This script converts string graph edges from FALCON assembler into 
-### SPAdes flavor of FASTG representation for visualization by Bandage
+### This script is an earlier version of Falcon2Fastg before porting to Python.
+### It represents the overlaps between reads as nodes. Hence, this is a different representation.
+
+### Output is the SPAdes flavor of FASTG representation, for visualization by Bandage
 ### Dependencies : seqtk, samtools
+
 ### CAUTION : removes existing fastg and intermediate file in directory
 
 

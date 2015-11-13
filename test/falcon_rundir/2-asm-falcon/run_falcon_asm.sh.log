@@ -1,0 +1,46 @@
+trap 'touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/2-asm-falcon/falcon_asm_done.exit' EXIT
++ trap 'touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/2-asm-falcon/falcon_asm_done.exit' EXIT
+cd /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl
++ cd /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl
+DB2Falcon -U preads
++ DB2Falcon -U preads
+cd /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/2-asm-falcon
++ cd /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/2-asm-falcon
+find /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files -name "*.las" > las.fofn 
++ find /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files -name '*.las'
+fc_ovlp_filter --db /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads.db --fofn las.fofn --max_diff 1000 --max_cov 100 --min_cov 0 --bestn 1 --n_core 64 --min_len 100 > preads.ovl
++ fc_ovlp_filter --db /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads.db --fofn las.fofn --max_diff 1000 --max_cov 100 --min_cov 0 --bestn 1 --n_core 64 --min_len 100
+[21742]starting ovlp_filter
+[21742]fofn 'las.fofn': ['/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files/preads.1.las']
+[21742]preparing filter_stage1
+[21742]maxrss:    10084
+[21743]starting run_filter_stage1('/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads.db', '/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files/preads.1.las', 1000, 100, 0, 100)
+[21743]maxrss:     7564
+[21743]maxrss:     7888
+[21743]finished run_filter_stage1('/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads.db', '/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files/preads.1.las', 1000, 100, 0, 100)
+[21742]preparing filter_stage2
+[21742]maxrss:    10108
+[21743]starting run_filter_stage2('/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads.db', '/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files/preads.1.las', 1000, 100, 0, 100, set([]))
+[21743]maxrss:     7948
+[21743]maxrss:     7960
+[21743]finished run_filter_stage2('/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads.db', '/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files/preads.1.las', 1000, 100, 0, 100, set([]))
+[21742]preparing filter_stage3
+[21742]maxrss:    10108
+[21743]starting run_filter_stage3('/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads.db', '/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files/preads.1.las', 1000, 100, 0, 100, set([]), set([]), 1)
+[21743]maxrss:     7960
+[21743]maxrss:     7996
+[21743]finished run_filter_stage3('/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads.db', '/nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/las_files/preads.1.las', 1000, 100, 0, 100, set([]), set([]), 1)
+[21742]maxrss:    10108
+[21742]finished ovlp_filter
+ln -sf /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads4falcon.fasta .
++ ln -sf /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/preads4falcon.fasta .
+fc_ovlp_to_graph preads.ovl --min_len 100 > fc_ovlp_to_graph.log
++ fc_ovlp_to_graph preads.ovl --min_len 100
+fc_graph_to_contig
++ fc_graph_to_contig
+fc_dedup_a_tigs
++ fc_dedup_a_tigs
+touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/2-asm-falcon/falcon_asm_done
++ touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/2-asm-falcon/falcon_asm_done
+touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/2-asm-falcon/falcon_asm_done.exit
++ touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/2-asm-falcon/falcon_asm_done.exit

@@ -1,0 +1,20 @@
+trap 'touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001/m_00001_done.exit' EXIT
++ trap 'touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001/m_00001_done.exit' EXIT
+cd /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001
++ cd /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001
+hostname
++ hostname
+nn9
+date
++ date
+Fri Nov 13 05:24:58 EST 2015
+time bash /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001/m_00001.sh
++ bash /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001/m_00001.sh
+
+real	0m0.016s
+user	0m0.000s
+sys	0m0.004s
+touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001/m_00001_done
++ touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001/m_00001_done
+touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001/m_00001_done.exit
++ touch /nfs/brubeck.bx.psu.edu/scratch1/samarth/bonsai/synth_human/try1/1-preads_ovl/m_00001/m_00001_done.exit

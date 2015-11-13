@@ -1,5 +1,4 @@
 import sys
-import os
 import csv
 from itertools import groupby
 from Bio import SeqIO
@@ -9,7 +8,7 @@ list_of_tuples = []
 all_nodes_list = []
 all_source_nodes = []
 
-sys.stdout = open('intmdt_NodeMode_out.fastg', 'w')
+sys.stdout = open('output.fastg', 'w')
 
 
 def convert_multiline_to_single_line_FASTA () :
@@ -71,8 +70,8 @@ def make_header() :
 		flag = "sink"
     	    else : 
 	        header.append("NODE_"+node+"_length_"+"500"+"_cov_50,")    
-	for item in header :
-	    sys.stdout.write(item)
+	str_header = ''.join(header)
+	sys.stdout.write(str_header[:-1]+';')
 	print 
 	corresponding_FASTA(source)
 
@@ -101,8 +100,5 @@ collapse_ctg_list()
 make_header()
 print_non_sources()
 
-os.system("sed 's/,$/;/' intmdt_NodeMode_out.fastg > FINAL.fastg")
-
-os.system("rm intmdt*")
 
 

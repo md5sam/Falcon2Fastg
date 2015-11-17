@@ -55,8 +55,6 @@ The figure below uses the same E. coli dataset, however the Repeat and Transitiv
 
 ### Caveats : 
 
-Each overlap between a pair of reads is currently reported as two edges.   
-
 Faked a constant coverage of "50" because Bandage expects coverage information in the FASTG record headers.
 
 Length record in FASTG header set to a constant "500". However, this does not seem to affect Bandage, which correctly calculates the read length

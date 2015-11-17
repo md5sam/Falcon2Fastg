@@ -37,20 +37,20 @@ def create_read_pair_tuples () :
 
 def make_direction_dict () :
     for pair in list_of_tuples :
-	if int(pair[0][:-2]) < int(pair[1][:-2]) :
-	    if pair[0][-1] == "E" and pair[0][-1] == "E" :
-		direction[pair[0][:-2]].append(pair[1][:-2])
+	if pair[0][-1] == "E" and pair[1][-1] == "E" :
+	    direction[pair[0][:-2]].append(pair[1][:-2])
             
-	    elif pair[0][-1] == "E" and pair[0][-1] == "B" :
-		direction[pair[0][:-2]].append(pair[1][:-2]+"'")
+	elif pair[0][-1] == "E" and pair[1][-1] == "B" :
+	    direction[pair[0][:-2]].append(pair[1][:-2]+"'")
                         
-	    elif pair[0][-1] == "B" and pair[0][-1] == "E" :
-		direction[pair[0][:-2]+"'"].append(pair[1][:-2])
+	elif pair[0][-1] == "B" and pair[1][-1] == "E" :
+            direction[pair[0][:-2]+"'"].append(pair[1][:-2])
 
-	    elif pair[0][-1] == "B" and pair[0][-1] == "B" :
-		direction[pair[0][:-2]+"'"].append(pair[1][:-2]+"'")
-	    else : 
-		print "ERROR : the tuples have not been parsed correctly"    
+	elif pair[0][-1] == "B" and pair[1][-1] == "B" :
+            direction[pair[0][:-2]+"'"].append(pair[1][:-2]+"'")
+	    
+        else : 
+	    print "ERROR : the tuples have not been parsed correctly"    
 
 
 def corresponding_FASTA(record_name): 

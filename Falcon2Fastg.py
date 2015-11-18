@@ -48,14 +48,16 @@ def convert_multiline_to_single_line_FASTA () :
     output_handle.close()
 
 
-# creates a tuple for every pair in sg_edges_list
+# creates a tuple for every "G" pair in sg_edges_list
 def create_read_pair_tuples () :
     with open("sg_edges_list") as sg_entries:
         read_pairs_TMI = csv.reader(sg_entries, delimiter=' ')
         for row in read_pairs_TMI :
-	    read_pair_tuple = ((row[0]),(row[1])) 	
-            list_of_tuples.append(read_pair_tuple)
+	    if row[-1] == "G" :
+                read_pair_tuple = ((row[0]),(row[1])) 	
+                list_of_tuples.append(read_pair_tuple)
     list_of_tuples.sort()	    
+
 
 # collapses multiple tuples into a dictionary
 # key is the first entry in a tuple; each key represents "Source" node

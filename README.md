@@ -22,8 +22,8 @@ Biopython (available at http://biopython.org/wiki/Download)
 
 ### Output : 
 
-The output of the tool is a FASTG file that can be opened with Bandage 
-(https://github.com/rrwick/Bandage).
+The output of the tool is a FASTG file (output.fastg) that can be opened with 
+Bandage (https://github.com/rrwick/Bandage).
 
 ![Alt text](/img/Falcon2Fastg_after_bandage.png?raw=true "Falcon2Fastg after Bandage")
 
@@ -35,8 +35,8 @@ Falcon2Fastg from a FALCON assembly (mitochondrial genome).
 (colors are random)
 * Edges represent the overlaps between reads found by FALCON (better viewed in 
 the zoomed-in image below) 
-* Only the edges used in the string graph ("G" flagged in sg_edges_list) were 
-used for this visualization.
+* Only the edges used in the string graph ("G" flagged in sg_edges_list) are 
+used by Falcon2Fastg to produce the output file.
 
 
 
@@ -48,44 +48,24 @@ Zooming in on a smaller set of nodes shows the edges in black, connecting the co
 
 
 
-For benchmarking, Falcon2Fastg was tested on the preads4falcon.fasta and 
+For benchmarking, Falcon2Fastg was run on the preads4falcon.fasta and 
 sg_edges_list file produced by the E.coli test dataset provided with the Falcon
  install. Instructions on obtaining the dataset are here : 
 https://github.com/PacificBiosciences/FALCON/wiki/Setup:-Complete-example  
 
-The test was performed on a desktop system with Intel Xeon CPU W3520 @ 2.67GHz 
+This run was performed on a desktop system with Intel Xeon CPU W3520 @ 2.67GHz 
 and 4 cores. Runtime for this dataset (449 Mb) of preads4falcon.fasta is :
 
     time python Falcon2Fastg.py
 
-    real        4m18.640s
-    user        2m16.457s
-    sys         1m59.268s
+    real	4m8.053s
+    user	2m13.920s
+    sys		1m53.490s
 
 
-The figure below represents a visualization of this E. coli data. In this case,
- all edges are visualized, including those involved in Repeats and edges which 
-are Transitive Reducible.
-
-
-
-![Alt text](/img/ecoli_Allnodes.png?raw=true "Ecoli all edges fastg after Bandage")
-
-
-
-
-
-The figure below uses the same E. coli preads dataset, however the Repeat and 
-Transitive Reducible edges are removed from sg_edges_list, to give a single 
-contiguous graph (along with many isolated nodes). Note the reduction in number
- of edges, from 10,552 in the previous figure to 1,457 here.
-
+The figure below represents a visualization of this E. coli data.  
 
 ![Alt text](/img/ecoli_Gnodes.png?raw=true "Ecoli 'G' edges fastg after Bandage")
-
-
-
-
 
 
 
@@ -100,6 +80,9 @@ Length record in FASTG header set to a constant "500". However, this does not
 seem to affect Bandage, which correctly calculates the read length
 
 
+### Testing :
+
+Please see the test/ directory for a small example dataset and output
 
 
 ## Other tools
@@ -120,13 +103,13 @@ Assumed the "length" record in FASTG header refers to length of overlap.
 
 
 
-## LICENSE 
+## License 
 
 This content is released under MIT License(https://opensource.org/licenses/MIT)
 Please see LICENSE.md for details.
 
 
-## AUTHORS
+## Authors
 
 Primary author : Samarth Rangavittal, The Pennsylvania State University
                  (szr165@psu.edu)

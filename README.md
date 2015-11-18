@@ -128,10 +128,9 @@ Please see LICENSE.md for details.
 
 ## AUTHORS
 
-Primary author : Samarth Rangavittal (szr165@psu.edu) 
-                 Huck Institutes of the Life Sciences
-		 The Pennsylvania State University
-
+Primary author : Samarth Rangavittal, The Pennsylvania State University
+                 szr165@psu.edu
+  
 Collaborators :  Rayan Chikhi, University of Lille 1                 
                  Jean-Stephane Varre, University of Lille 1
 

@@ -129,8 +129,8 @@ Please see LICENSE.md for details.
 ## AUTHORS
 
 Primary author : Samarth Rangavittal, The Pennsylvania State University
-                 szr165@psu.edu
+                 (szr165@psu.edu)
   
 Collaborators :  Rayan Chikhi, University of Lille 1                 
-                 Jean-Stephane Varre, University of Lille 1
+                 Jean-Stephane Varré, University of Lille 1
 

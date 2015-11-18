@@ -1,5 +1,7 @@
 import sys
 import csv
+import os.path
+
 from collections import defaultdict
 from Bio import SeqIO
 from Bio.SeqIO import FastaIO
@@ -10,7 +12,25 @@ all_source_nodes = []
 follows = defaultdict(list)
 
 
-sys.stdout = open('output.fastg', 'w')
+# checks if sg_edges_list and preads4falcon.fasta are present 
+def check_files_exist () :
+    if os.path.isfile("preads4falcon.fasta") == True :
+        if os.path.isfile("sg_edges_list") == True :     
+            return True
+        else : 
+            print
+            print "ERROR! sg_edges_list not found, please place it in this directory"
+            print        
+    else :
+        if os.path.isfile("sg_edges_list") != True :
+            print
+            print "ERROR ! preads4falcon.fasta and sg_edges_list not found, please place them in this directory"
+            print 
+        else : 
+            print 
+            print "ERROR ! preads4falcon.fasta not found, please place it in this directory"
+            print
+        return False
 
 
 # converts multiline preads4falcon.fasta into a single line fasta
@@ -153,13 +173,14 @@ def print_non_sources_complement() :
     fp_non.close() 
 
 
+if __name__ == "__main__": 
 
-convert_multiline_to_single_line_FASTA ()
-create_read_pair_tuples()
-make_follows_dict()
-make_fastg()
-print_non_sources()
-print_non_sources_complement()
-
-
+    if check_files_exist() == True :
+        sys.stdout = open('output.fastg', 'w')
+        convert_multiline_to_single_line_FASTA ()
+        create_read_pair_tuples()
+        make_follows_dict()
+        make_fastg()
+        print_non_sources()
+        print_non_sources_complement()
 

@@ -23,7 +23,7 @@ Biopython (available at http://biopython.org/wiki/Download)
 ### Output : 
 
 The output of the tool is a FASTG file (output.fastg) that can be opened with 
-Bandage (https://github.com/rrwick/Bandage).
+Bandage (http://rrwick.github.io/Bandage/).
 
 ![Alt text](/img/Falcon2Fastg_after_bandage.png?raw=true "Falcon2Fastg after Bandage")
 
@@ -84,6 +84,8 @@ seem to affect Bandage, which correctly calculates the read length
 
 Please see the test/ directory for a small example dataset and output
 
+Falcon can be installed following the instructions here : 
+https://github.com/PacificBiosciences/FALCON/wiki/Setup:-Complete-example
 
 ## Other tools
 

@@ -20,7 +20,8 @@ def check_files_exist () :
         else : 
             print
             print "ERROR! sg_edges_list not found, please place it in this directory"
-            print        
+            print
+            return False        
     else :
         if os.path.isfile("sg_edges_list") != True :
             print

@@ -1,7 +1,7 @@
 # Falcon2Fastg 
 
-This software converts the results of PacBio assembly using FALCON, to a FASTG 
-graph that can be visualized using Bandage.
+This software converts the results of PacBio assembly using [FALCON](https://github.com/PacificBiosciences/FALCON), to a FASTG 
+graph that can be visualized using [Bandage](http://rrwick.github.io/Bandage/).
 
 ### Usage
 
@@ -23,7 +23,7 @@ Biopython (available at http://biopython.org/wiki/Download)
 ### Output : 
 
 The output of the tool is a FASTG file (output.fastg) that can be opened with 
-Bandage (http://rrwick.github.io/Bandage/).
+[Bandage](http://rrwick.github.io/Bandage/).
 
 ![Alt text](/img/Falcon2Fastg_after_bandage.png?raw=true "Falcon2Fastg after Bandage")
 

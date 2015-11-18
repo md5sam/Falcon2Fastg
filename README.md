@@ -1,7 +1,6 @@
 # Falcon2Fastg 
 
-This software converts the results of PacBio assembly using [FALCON](https://github.com/PacificBiosciences/FALCON), to a FASTG 
-graph that can be visualized using [Bandage](http://rrwick.github.io/Bandage/).
+This software converts the results of PacBio assembly using [FALCON](https://github.com/PacificBiosciences/FALCON), to a [FASTG](http://fastg.sourceforge.net/) graph that can be visualized using [Bandage](http://rrwick.github.io/Bandage/).
 
 ### Usage
 
@@ -90,9 +89,11 @@ https://github.com/PacificBiosciences/FALCON/wiki/Setup:-Complete-example
 ## Other tools
 
 
-Usage for utils/graph_of_overlaps.sh : 
+The ```utils/graph_of_overlaps.sh``` script is included for advanced users only, to visualize a different type of graph: one where the nodes correspond to overlaps between reads (in the ```Falcon2Fastg.py```, overlaps are represented by edges, not nodes).
 
-./graph_of_overlaps.sh edges_list reads.fasta
+Usage:
+
+    ./graph_of_overlaps.sh edges_list reads.fasta
 
 Caveats :
 

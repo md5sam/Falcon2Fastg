@@ -122,7 +122,7 @@ Assumed the "length" record in FASTG header refers to length of overlap.
 
 ## LICENSE 
 
-This content is released under MIT License(https://opensource.org/licenses/MIT_ 
+This content is released under MIT License(https://opensource.org/licenses/MIT)
 Please see LICENSE.md for details.
 
 
@@ -132,9 +132,9 @@ Primary author : Samarth Rangavittal (szr165@psu.edu)
                  Huck Institutes of the Life Sciences
 		 The Pennsylvania State University
 
-Collaborators : Rayan Chikhi (rayan.chikhi@univ-lille1.fr)
-                University of Lille 1                 
+Collaborators :  Rayan Chikhi (rayan.chikhi@univ-lille1.fr)
+                 University of Lille 1                 
   
-                Jean-Stephane Varre 
-	 	University of Lille 1
+                 Jean-Stephane Varre 
+	 	 University of Lille 1
 

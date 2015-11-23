@@ -4,7 +4,7 @@ This software converts the results of PacBio assembly using [FALCON](https://git
 
 ### Usage
 
-    python Falcon2Fastg.py [--mode=read/contig/both]
+    python Falcon2Fastg.py [--mode=read/contig/both; default: both]
 
 Run it in the output directory of FALCON assembly (2-asm-falcon). It needs 
 the following input files:
@@ -13,13 +13,17 @@ the following input files:
 
 * sg_edges_list 
 
-* p_ctg.fa (if --mode is set to contig or both)  
+* p_ctg.fa (if `--mode` is set to `contig` or `both`)  
 
 ### Dependencies :
 
 Biopython (available at http://biopython.org/wiki/Download)
 
 pyfaidx (available at https://github.com/mdshw5/pyfaidx)
+
+Quick installation of dependencies:
+
+    pip install biopython pyfaidx  # add --user if you don't have root
 
 ### Output : 
 
@@ -123,7 +127,8 @@ Please see LICENSE.md for details.
 
 Primary author : Samarth Rangavittal, The Pennsylvania State University
                  (szr165@psu.edu)
-  
-Collaborators :  Rayan Chikhi, University of Lille 1                 
-                 Jean-Stéphane Varré, University of Lille 1
+                
+Rayan Chikhi, University of Lille 1   
+
+Jean-Stéphane Varré, University of Lille 1
 

@@ -30,8 +30,10 @@ if args['mode'] == "read" :
     mode = "read"
 elif args['mode'] == "contig" :
     mode = "contig"
+elif args['mode'] == "both" :
+    mode = "both"
 else :
-    mode = "both"	
+    mode = "read"	
 
 
 # checks if sg_edges_list, p_ctg.fa and preads4falcon.fasta are present 
@@ -287,7 +289,7 @@ def print_non_ovlp_sources_complement(node_mode) :
 
 
 if __name__ == "__main__": 
-    print "Mode is : ", mode 
+    #print "Mode is : ", mode 
     if check_files_exist() == True :
         convert_multiline_to_single_line_FASTA ()
         create_read_pair_tuples()

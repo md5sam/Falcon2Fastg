@@ -33,7 +33,7 @@ elif args['mode'] == "contig" :
 elif args['mode'] == "both" :
     mode = "both"
 else :
-    mode = "read"	
+    mode = "both"	
 
 
 # checks if sg_edges_list, p_ctg.fa and preads4falcon.fasta are present 

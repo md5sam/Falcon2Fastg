@@ -4,7 +4,7 @@ This software converts the results of PacBio assembly using [FALCON](https://git
 
 ### Usage
 
-    python Falcon2Fastg.py
+    python Falcon2Fastg.py [--mode=read/contig/both]
 
 Run it in the output directory of FALCON assembly (2-asm-falcon). It needs 
 the following input files:
@@ -13,15 +13,17 @@ the following input files:
 
 * sg_edges_list 
 
+* p_ctg.fa (if --mode is set to contig or both)  
 
 ### Dependencies :
 
 Biopython (available at http://biopython.org/wiki/Download)
 
+pyfaidx (available at https://github.com/mdshw5/pyfaidx)
 
 ### Output : 
 
-The output of the tool is a FASTG file (output.fastg) that can be opened with 
+The output of the tool is a FASTG file (reads.fastg) that can be opened with 
 [Bandage](http://rrwick.github.io/Bandage/).
 
 ![Alt text](/img/Falcon2Fastg_after_bandage.png?raw=true "Falcon2Fastg after Bandage")
@@ -57,9 +59,9 @@ and 4 cores. Runtime for this dataset (449 Mb) of preads4falcon.fasta is :
 
     time python Falcon2Fastg.py
 
-    real	4m8.053s
-    user	2m13.920s
-    sys		1m53.490s
+    real	2m14.395s
+    user	1m42.925s
+    sys		0m9.514s
 
 
 The figure below represents a visualization of this E. coli data.  
@@ -67,8 +69,13 @@ The figure below represents a visualization of this E. coli data.
 ![Alt text](/img/ecoli_Gnodes.png?raw=true "Ecoli 'G' edges fastg after Bandage")
 
 
+### Contig mode (experimental)
 
+For larger assemblies, Falcon2Fastg can be used to visualize overlaps between contigs. This mode is still experimental.
 
+Usage : python Falcon2Fastg.py --mode=contig
+
+This produces the output file "contigs.fastg_experimental"
 
 ### Caveats : 
 

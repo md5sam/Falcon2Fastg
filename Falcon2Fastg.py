@@ -19,7 +19,10 @@ all_ctg_list = []
 all_ctg_source_nodes = []
 follows = defaultdict(list)
 ctg_follows = defaultdict(list)
-ctg_associated_with_extremity_nodes = defaultdict(list)
+contigs = defaultdict(list)
+circular_ctgs = defaultdict(list)
+linear_ctgs = defaultdict(list)
+p_ctg_names_set = set ()
 
 
 parser = argparse.ArgumentParser(description='Falcon2Fastg converts FALCON output to FASTG format')
@@ -80,28 +83,57 @@ def create_read_pair_tuples () :
     list_of_tuples.sort()	    
 
 
-# extract headers from p_ctg.fa, and converts it into a dictionary
+# these are all the ctgs for which you actually have the sequence in p_ctg.fa
+def create_p_ctg_names_set () :
+    p_ctg_name_list = []
+    p_ctg_headers_list = []
+    global p_ctg_names_set
+    fp_p_ctg = open ("p_ctg.fa")
+    for line in fp_p_ctg :
+        if line.startswith('>'):
+            p_ctg_headers_list.append(line)
+    p_ctg_headers = csv.reader(p_ctg_headers_list, delimiter=' ', skipinitialspace=True)
+    for row in p_ctg_headers :
+        p_ctg_name = str(row[0][1:])
+        p_ctg_name_list.append(p_ctg_name)
+        p_ctg_name_list.append(p_ctg_name+"'")
+    p_ctg_names_set = set (name for name in p_ctg_name_list)
+
+
+# extract headers from ctg_paths, and converts it into a dictionary
 # of the form [ctg_name] : {ctg_start_read, ctg_end_read}
-def create_ctg_start_and_end_node_tuples () :
+def create_contig_dict () :
     ctg_headers_list = []
-    fp_ctg = open ("p_ctg.fa")
-    for line in fp_ctg : 
-        if line[0] == ">" :
-           ctg_headers_list.append(line)
-    ctg_headers = csv.reader(ctg_headers_list, delimiter=' ')
+    fp_ctg = open ("ctg_paths")
+    for line in fp_ctg :
+        ctg_headers_list.append(line)
+    ctg_headers = csv.reader(ctg_headers_list, delimiter=' ', skipinitialspace=True)
     for row in ctg_headers :
-        ctg_name = row[0][1:]
-        ctg_start_node = (row[1].split("~"))[0]
-        ctg_end_node = (row[1].split("~"))[3]
+        ctg_name = str(row[0])
+        ctg_start_node = (row[2].split("~"))[0]
+        ctg_end_node = row[3]
+        ctg_type = str(row[1])
+        if ctg_type == "ctg_linear" :
+            if ctg_name not in p_ctg_names_set : 
+                if ctg_name[-1] == "R":
+                    ctg_name = ctg_name[:-1]+"F'"
+                else :
+                    ctg_name = ctg_name[:-1]+"R'"
+        else : 
+            for existing_ctg in circular_ctgs :
+                if ctg_start_node[:-1]+"E" or ctg_start_node[:-1]+"B" in circular_ctgs[existing_ctg] :
+                    ctg_name = existing_ctg+"'" 
+           
+            circular_ctgs[ctg_name].append(ctg_start_node)
         all_ctg_list.append(ctg_name)
-        ctg_associated_with_extremity_nodes[ctg_name].append(ctg_start_node)
-        ctg_associated_with_extremity_nodes[ctg_name].append(ctg_end_node)
-
-
+        contigs[ctg_name].append(ctg_start_node)
+        contigs[ctg_name].append(ctg_end_node)         
+          
+              
 # collapses multiple tuples into a dictionary
 # key is the first entry in a tuple; each key represents "Source" node
 # value(s) is(are) the second entry(entries) in tuple(s); are the "Sink" nodes
-def make_follows_dict () :
+def make_read_connections () :
     for pair in list_of_tuples :
 	start_node_location = pair[0][-1] 
         end_node_location = pair[1][-1]
@@ -126,72 +158,71 @@ def make_follows_dict () :
 
 
 # returns True if overlap exists between a pair of reads
-# used by make_ctg_follows_dict()
-def ovlp_exists(readAwithOrient, readBwithOrient) :
-    orientA=readAwithOrient[-1]
-    orientB=readBwithOrient[-1]  
-    readA=readAwithOrient[:-2]
-    readB=readBwithOrient[:-2]
+# used by make_contig_connections()
+def ovlp_exists(curr_node, tgt_node) :
+    curr_extremity = curr_node[-1]
+    tgt_extremity = tgt_node[-1]  
+    curr_read = curr_node[:-2]
+    tgt_read = tgt_node[:-2]
    
-    if orientA == "E" and orientB == "B" :
-        if readB in follows[readA] :
+    if curr_extremity == "E" and tgt_extremity == "B" :
+        if tgt_read in follows[curr_read] :
             return True
-    elif orientA == "E" and orientB == "E" :
-        if readB+"'" in follows[readA] :
+    elif curr_extremity == "E" and tgt_extremity == "E" :
+        if tgt_read+"'" in follows[curr_read] :
             return True
-    elif orientA == "B" and orientB == "B" :
-        if readB in follows[readA+"'"] :
+    elif curr_extremity == "B"and tgt_extremity == "B" :
+        if tgt_read in follows[curr_read+"'"] :
             return True
-    elif orientA == "B" and orientB == "B" :
-        if readB+"'" in follows[readA+"'"] :
+    elif curr_extremity == "B" and tgt_extremity == "E" :
+        if tgt_read+"'" in follows[curr_read+"'"] :
             return True
     return False
 
 
 # this function creates a ctg_follows dictionary
 # key is the ctg, value(s) is (are) its successor(s)
-def make_ctg_follows_dict() :  
+def make_contig_connections() :  
     count = 0
-    for curr_ctg in ctg_associated_with_extremity_nodes :
+    for curr_ctg in contigs :
         ctgs_to_investigate = []
         for all_ctgs in all_ctg_list :    
             if curr_ctg != all_ctgs : 
                 ctgs_to_investigate.append(all_ctgs)
         
-        curr_ctg_end_node = ctg_associated_with_extremity_nodes[curr_ctg][1]
-        curr_ctg_start_node = ctg_associated_with_extremity_nodes[curr_ctg][0]
-        
+        curr_ctg_end_node = contigs[curr_ctg][1]
+        curr_ctg_start_node = contigs[curr_ctg][0]
+      
+        # check if contig is circular
+        if curr_ctg_start_node == curr_ctg_end_node :
+            ctg_follows[curr_ctg].append(curr_ctg)        
+
         for tgt_ctg in ctgs_to_investigate :
-            tgt_ctg_start_node = ctg_associated_with_extremity_nodes[tgt_ctg][0]
-            tgt_ctg_end_node = ctg_associated_with_extremity_nodes[tgt_ctg][1]
+            tgt_ctg_start_node = contigs[tgt_ctg][0]
+            tgt_ctg_end_node = contigs[tgt_ctg][1]
 
-            if curr_ctg_start_node == tgt_ctg_start_node or curr_ctg_start_node == tgt_ctg_end_node or curr_ctg_end_node == tgt_ctg_start_node or curr_ctg_end_node == tgt_ctg_end_node :
-                count = count + 1  
-                if curr_ctg_end_node == tgt_ctg_start_node :
-                    ctg_follows[curr_ctg].append(tgt_ctg)
-                elif curr_ctg_end_node == tgt_ctg_end_node :
-                    ctg_follows[curr_ctg].append(tgt_ctg+"'")
-                elif curr_ctg_start_node == tgt_ctg_start_node :
-                    ctg_follows[curr_ctg+"'"].append(tgt_ctg) 
-                else :
-                    ctg_follows[curr_ctg+"'"].append(tgt_ctg+"'")
+            if curr_ctg_end_node == tgt_ctg_start_node :
+                ctg_follows[curr_ctg].append(tgt_ctg)
+            #elif curr_ctg_end_node == tgt_ctg_end_node :
+            #    ctg_follows[curr_ctg].append(tgt_ctg+"'")
+            #elif curr_ctg_start_node == tgt_ctg_start_node :
+            #    ctg_follows[curr_ctg+"'"].append(tgt_ctg) 
+            #else :
+            #    ctg_follows[curr_ctg+"'"].append(tgt_ctg+"'")
 
-            # Case 0 : This is fine -> a circular contig                    
-            if curr_ctg_start_node == curr_ctg_end_node :
-                ctg_follows[curr_ctg].append(curr_ctg) 
     
             # Case 1 : curr_end overlaps with tgt_start
             if ovlp_exists(curr_ctg_end_node,tgt_ctg_start_node) == True :
                 ctg_follows[curr_ctg].append(tgt_ctg)
             # Case 2 : curr_end overlaps with tgt_end 
-            elif ovlp_exists(curr_ctg_end_node,tgt_ctg_end_node) == True : 
-                ctg_follows[curr_ctg].append(tgt_ctg+"'")
+            #elif ovlp_exists(curr_ctg_end_node,tgt_ctg_end_node) == True : 
+            #    ctg_follows[curr_ctg].append(tgt_ctg+"'")
             # Case 3 : curr_start overlaps with tgt_start
-            elif ovlp_exists(curr_ctg_start_node,tgt_ctg_start_node) == True :
-                ctg_follows[curr_ctg+"'"].append(tgt_ctg)
-                # Case 4 : curr_start overlaps with tgt_end 
-            elif ovlp_exists(curr_ctg_start_node,tgt_ctg_end_node) == True :
-                ctg_follows[curr_ctg+"'"].append(tgt_ctg+"'")
+            #elif ovlp_exists(curr_ctg_start_node,tgt_ctg_start_node) == True :
+            #    ctg_follows[curr_ctg+"'"].append(tgt_ctg)
+            #    # Case 4 : curr_start overlaps with tgt_end 
+            #elif ovlp_exists(curr_ctg_start_node,tgt_ctg_end_node) == True :
+            #    ctg_follows[curr_ctg+"'"].append(tgt_ctg+"'")
 
 
 # used by make_fastg() to provide padding for the header
@@ -293,7 +324,7 @@ if __name__ == "__main__":
     if check_files_exist() == True :
         convert_multiline_to_single_line_FASTA ()
         create_read_pair_tuples()
-        make_follows_dict()
+        make_read_connections()
         if mode == "read" or mode == "both" :    
             sys.stdout = open('reads.fastg', 'w')
 	    make_fastg("read")
@@ -302,8 +333,9 @@ if __name__ == "__main__":
 	    sys.stdout.close() 
         if mode == "contig" or mode == "both":
 	    sys.stdout = open('contigs.fastg_experimental','w')	
-            create_ctg_start_and_end_node_tuples()
-            make_ctg_follows_dict()
+            create_p_ctg_names_set()
+            create_contig_dict()
+            make_contig_connections()
             make_fastg("contig")
             print_non_ovlp_sources("contig")
 	    print_non_ovlp_sources_complement("contig")

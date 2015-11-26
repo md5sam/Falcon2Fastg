@@ -332,7 +332,7 @@ if __name__ == "__main__":
             print_non_ovlp_sources_complement("read")
 	    sys.stdout.close() 
         if mode == "contig" or mode == "both":
-	    sys.stdout = open('contigs.fastg_experimental','w')	
+	    sys.stdout = open('contigs.fastg','w')	
             create_p_ctg_names_set()
             create_contig_dict()
             make_contig_connections()

@@ -43,7 +43,7 @@ else :
 def check_files_exist () :
     if os.path.isfile("preads4falcon.fasta") == True and os.path.isfile("sg_edges_list") == True :
 	if mode == "contig" or mode == "both" :
-	    if os.path.isfile("p_ctg.fa") == True and os.path.isfile("ctg_paths") : 
+	    if os.path.isfile("p_ctg.fa") == True and os.path.isfile("ctg_paths") == True : 
 	        return True
 	    else :
 		print 

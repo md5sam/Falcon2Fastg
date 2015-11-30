@@ -121,7 +121,7 @@ def create_contig_dict () :
                     ctg_name = ctg_name[:-1]+"R'"
         else : 
             for existing_ctg in circular_ctgs :
-                if ctg_start_node[:-1]+"E" or ctg_start_node[:-1]+"B" in circular_ctgs[existing_ctg] :
+                if ctg_start_node[:-1]+"E" in circular_ctgs[existing_ctg] or ctg_start_node[:-1]+"B" in circular_ctgs[existing_ctg] :
                     ctg_name = existing_ctg+"'" 
            
             circular_ctgs[ctg_name].append(ctg_start_node)

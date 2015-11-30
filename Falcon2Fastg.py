@@ -39,21 +39,21 @@ else :
     mode = "both"	
 
 
-# checks if sg_edges_list, p_ctg.fa and preads4falcon.fasta are present 
+# checks if sg_edges_list, p_ctg.fa, ctg_paths and preads4falcon.fasta are present 
 def check_files_exist () :
     if os.path.isfile("preads4falcon.fasta") == True and os.path.isfile("sg_edges_list") == True :
 	if mode == "contig" or mode == "both" :
-	    if os.path.isfile("p_ctg.fa") == True : 
+	    if os.path.isfile("p_ctg.fa") == True and os.path.isfile("ctg_paths") : 
 	        return True
 	    else :
 		print 
-		print "ERROR! Please make sure p_ctg.fa is in this directory"
+		print "ERROR! Please make sure p_ctg.fa and ctg_paths are in this directory"
 		print 
 		return False 
         return True
     else : 
         print
-        print "ERROR! Please make sure sg_edges_list, preads4falcon.fasta and p_ctg.fa are in this directory"
+        print "ERROR! Please make sure sg_edges_list, preads4falcon.fasta, ctg_paths and p_ctg.fa are in this directory"
         print
         return False        
 
@@ -201,28 +201,13 @@ def make_contig_connections() :
             tgt_ctg_start_node = contigs[tgt_ctg][0]
             tgt_ctg_end_node = contigs[tgt_ctg][1]
 
+            # curr_end is the same as tgt_start
             if curr_ctg_end_node == tgt_ctg_start_node :
                 ctg_follows[curr_ctg].append(tgt_ctg)
-            #elif curr_ctg_end_node == tgt_ctg_end_node :
-            #    ctg_follows[curr_ctg].append(tgt_ctg+"'")
-            #elif curr_ctg_start_node == tgt_ctg_start_node :
-            #    ctg_follows[curr_ctg+"'"].append(tgt_ctg) 
-            #else :
-            #    ctg_follows[curr_ctg+"'"].append(tgt_ctg+"'")
 
-    
-            # Case 1 : curr_end overlaps with tgt_start
+            # curr_end overlaps with tgt_start
             if ovlp_exists(curr_ctg_end_node,tgt_ctg_start_node) == True :
                 ctg_follows[curr_ctg].append(tgt_ctg)
-            # Case 2 : curr_end overlaps with tgt_end 
-            #elif ovlp_exists(curr_ctg_end_node,tgt_ctg_end_node) == True : 
-            #    ctg_follows[curr_ctg].append(tgt_ctg+"'")
-            # Case 3 : curr_start overlaps with tgt_start
-            #elif ovlp_exists(curr_ctg_start_node,tgt_ctg_start_node) == True :
-            #    ctg_follows[curr_ctg+"'"].append(tgt_ctg)
-            #    # Case 4 : curr_start overlaps with tgt_end 
-            #elif ovlp_exists(curr_ctg_start_node,tgt_ctg_end_node) == True :
-            #    ctg_follows[curr_ctg+"'"].append(tgt_ctg+"'")
 
 
 # used by make_fastg() to provide padding for the header

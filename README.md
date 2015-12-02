@@ -77,9 +77,14 @@ Falcon2Fastg can also be used to visualize the contigs produced by FALCON, and o
 
 
 To test this visualization mode, we assembled Drosophila melanogaster reads available at 
-(https://github.com/PacificBiosciences/DevNet/wiki/Drosophila-sequence-and-assembly). The FALCON assembly parameters were not optimized, and the final p_ctgs.fa file had 642 contigs with total length ~27 Mbp.  
+(https://github.com/PacificBiosciences/DevNet/wiki/Drosophila-sequence-and-assembly).
+The input file (dmel_FALCON_preassembled_reads.fasta) was 2.2G in size.  
+FALCON assembly parameters were not optimized, and were as follows : 
+length_cutoff = 3000, length_cutoff_pr = 6000, overlap_filtering_setting = --max_diff 100 --max_cov 100 --min_cov 20
+ 
+The final p_ctgs.fa file had 642 contigs with total length ~27 Mbp.  
 
-Execution of Falcon2Fastg took 5 minutes on a desktop computer (size of ``preads4falcon.fasta``: 2.1 GB).
+Execution of Falcon2Fastg took 5 minutes on a desktop computer (size of ``preads4falcon.fasta``: 2.2 GB).
 
 The figure below is the visualization of these D. mel. contigs (colors are random)
 
@@ -100,7 +105,7 @@ The contig below (red) and has more reads within it. Its read density is around 
 ![Alt text](/img/read_density_schematic.png?raw=true "Read Density schematic")
 
 
-Bandage visualization of contigs from a Falcon assembly, colored by read density (red=higher, black=lower) 
+The figure below is the visualization of the same D. mel. contigs, colored by read density.
 
 ![Alt text](/img/Dmel_ctgs_rd.png?raw=true "D. mel. contigs after Bandage")
 

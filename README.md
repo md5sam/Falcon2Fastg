@@ -100,7 +100,7 @@ The contig below (red) and has more reads within it. Its read density is around 
 ![Alt text](/img/read_density_schematic.png?raw=true "Read Density schematic")
 
 
-The figure below is the visualization of the same D. mel. contigs with colors representing read density. 
+Bandage visualization of contigs from a Falcon assembly, colored by read density (red=higher, black=lower) 
 
 ![Alt text](/img/Dmel_ctgs_rd.png?raw=true "D. mel. contigs after Bandage")
 

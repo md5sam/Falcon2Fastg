@@ -1,8 +1,6 @@
 ### Other tools
 
-The ```utils/graph_of_overlaps.sh``` script is included for advanced users only, to visualize a different type o
-f graph: one where the nodes correspond to overlaps between reads (in the ```Falcon2Fastg.py```, overlaps are re
-presented by edges, not nodes).
+The ```utils/graph_of_overlaps.sh``` script is included for advanced users only, to visualize a different Falcon graph type: nodes now correspond to overlaps between reads. In the original ```Falcon2Fastg.py``` program, overlaps are represented by edges, not nodes.
 
 Usage:
 

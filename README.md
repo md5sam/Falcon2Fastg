@@ -73,7 +73,7 @@ The figure below represents a visualization of this E. coli data.
 
 ### Contigs visualization 
 
-Falcon2Fastg can also be used to visualize the contigs produced by FALCON, and overlaps between them. The contig graph is created in ``contigs.fastg``. By default, Falcon2Fastg will output this file. You can request that it outputs only the reads graph using the ``--only-output=reads`` parameter.
+Falcon2Fastg can also be used to visualize the contigs produced by FALCON, and overlaps between them. The contig graph is created in ``contigs.fastg``. By default, Falcon2Fastg will output this file. You can choose that it outputs only the reads graph using the ``--only-output=reads`` parameter.
 
 
 To test this visualization mode, we assembled Drosophila melanogaster reads available at 
@@ -90,7 +90,7 @@ The figure below is the visualization of these D. mel. contigs (colors are rando
 
 Read density is calculated as (sum of length of all reads used in contig / 
 length of contig). Different read density can be used to distinguish between 
-different contigs  
+different contigs. 
 
 The figure below is the visualization of the same D. mel. contigs with colors representing read density. 
 

@@ -99,7 +99,7 @@ The figure below is the visualization of these D. mel. contigs (colors are rando
 
 Bandage provides a way to visualize k-mer coverage, as reported by the assembler. As Falcon is a string graph assembler, it does not report such information. Ideally, to compute the coverage of a contig, one would need to re-map the reads back to the assembled contigs. Here, we report a more simple metric that is easy to compute from the output of Falcon. 
 
-*Read density* is calculated as (sum of length of all reads used in contig / 
+*Read density* is calculated as (sum of length of all reads used by FALCON to construct the contig / 
 length of contig). We believe that variation in read density reflects variation of coverage;
 
 The figure below is a schematic of read density. The blue arrows represent reads that were used by Falcon to create the red (resp. black) contig. The contig above (black) has fewer reads within it. Its read density is around 2.0

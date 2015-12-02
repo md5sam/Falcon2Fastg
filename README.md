@@ -86,20 +86,21 @@ The figure below is the visualization of these D. mel. contigs (colors are rando
 ![Alt text](/img/Dmel_ctgs.png?raw=true "D. mel. contigs after Bandage")
 
 
-### Read density 
+### Read density (approximate read coverage)
 
-Read density is calculated as (sum of length of all reads used in contig / 
-length of contig). Different read density can be used to distinguish between 
-different contigs. 
+Bandage provides a way to visualize k-mer coverage, as reported by the assembler. As Falcon is a string graph assembler, it does not report such information. Ideally, to compute the coverage of a contig, one would need to re-map the reads back to the assembled contigs. Here, we report a more simple metric that is easy to compute from the output of Falcon. 
 
-The figure below is a schematic of read density. The blue arrows represent reads within the red or black contig.The contig above is colored black and has fewer reads within it. Its read density is around 2.0
-The contig below is colored red and has more reads within it. Its read density is around 5.0
+*Read density* is calculated as (sum of length of all reads used in contig / 
+length of contig). We believe that variation in read density reflects variation of coverage;
+
+The figure below is a schematic of read density. The blue arrows represent reads that were used by Falcon to create the red (resp. black) contig. The contig above (black) has fewer reads within it. Its read density is around 2.0
+The contig below (red) and has more reads within it. Its read density is around 5.0
  
 
 ![Alt text](/img/read_density_schematic.png?raw=true "Read Density schematic")
 
 
-Visualization of contigs from (un-optimized) assembly of D. Melanogaster, colored by read density (red=higher, black=lower) 
+The figure below is the visualization of the same D. mel. contigs with colors representing read density. 
 
 ![Alt text](/img/Dmel_ctgs_rd.png?raw=true "D. mel. contigs after Bandage")
 

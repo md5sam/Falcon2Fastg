@@ -92,6 +92,13 @@ Read density is calculated as (sum of length of all reads used in contig /
 length of contig). Different read density can be used to distinguish between 
 different contigs. 
 
+The figure below is a schematic of read density. The blue arrows represent reads within the red or black contig.The contig above is colored black and has fewer reads within it. Its read density is around 2.0
+The contig below is colored red and has more reads within it. Its read density is around 5.0
+ 
+
+![Alt text](/img/read_density_schematic.png?raw=true "Read Density schematic")
+
+
 The figure below is the visualization of the same D. mel. contigs with colors representing read density. 
 
 ![Alt text](/img/Dmel_ctgs_rd.png?raw=true "D. mel. contigs after Bandage")

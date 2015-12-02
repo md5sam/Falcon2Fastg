@@ -99,7 +99,7 @@ The contig below is colored red and has more reads within it. Its read density i
 ![Alt text](/img/read_density_schematic.png?raw=true "Read Density schematic")
 
 
-Bandage visualization of contigs from (un-optimized) Falcon assembly of D. Mel, colored by read density (red=higher, black=lower) 
+Visualization of contigs from (un-optimized) assembly of D. Melanogaster, colored by read density (red=higher, black=lower) 
 
 ![Alt text](/img/Dmel_ctgs_rd.png?raw=true "D. mel. contigs after Bandage")
 

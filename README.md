@@ -76,11 +76,15 @@ The figure below represents a visualization of this E. coli data.
 Falcon2Fastg can also be used to visualize the contigs produced by FALCON, and overlaps between them. The contig graph is created in ``contigs.fastg``. By default, Falcon2Fastg will output this file. You can choose that it outputs only the reads graph using the ``--only-output=reads`` parameter.
 
 
-To test this visualization mode, we assembled Drosophila melanogaster reads available at 
-(https://github.com/PacificBiosciences/DevNet/wiki/Drosophila-sequence-and-assembly).
-The input file (dmel_FALCON_preassembled_reads.fasta) was 2.2G in size.  
+To test this visualization mode, we assembled Drosophila melanogaster reads available at:  
+https://github.com/PacificBiosciences/DevNet/wiki/Drosophila-sequence-and-assembly
+
+The input file was 2.2G in size (dmel_FALCON_preassembled_reads.fasta).
+  
 FALCON assembly parameters were not optimized, and were as follows : 
-length_cutoff = 3000, length_cutoff_pr = 6000, overlap_filtering_setting = --max_diff 100 --max_cov 100 --min_cov 20
+
+length_cutoff = 3000, length_cutoff_pr = 6000, 
+overlap_filtering_setting = --max_diff 100 --max_cov 100 --min_cov 20
  
 The final p_ctgs.fa file had 642 contigs with total length ~27 Mbp.  
 

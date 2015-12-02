@@ -4,8 +4,6 @@ import sys
 import argparse
 import csv
 import os.path
-
-
 from collections import defaultdict
 from Bio import SeqIO
 from Bio.SeqIO import FastaIO
@@ -23,18 +21,20 @@ contigs = defaultdict(list)
 circular_ctgs = defaultdict(list)
 linear_ctgs = defaultdict(list)
 p_ctg_names_set = set ()
+unitigs = defaultdict(list)
+read_density = "1"
+node_length = "1"
+read_len_dict = defaultdict(int)
 
 
 parser = argparse.ArgumentParser(description='Falcon2Fastg converts FALCON output to FASTG format')
-parser.add_argument('-m','--mode', help='Enter MODE as either "read", "contig" or "both"', required=False)
+parser.add_argument('--only-output', help='Only output either "reads", "contigs" or "both"', required=False)
 args = vars(parser.parse_args())
 
-if args['mode'] == "read" :
+if args['only_output'] == 'reads' :
     mode = "read"
-elif args['mode'] == "contig" :
+elif args['only_output'] == 'contigs' :
     mode = "contig"
-elif args['mode'] == "both" :
-    mode = "both"
 else :
     mode = "both"	
 
@@ -43,29 +43,33 @@ else :
 def check_files_exist () :
     if os.path.isfile("preads4falcon.fasta") == True and os.path.isfile("sg_edges_list") == True :
 	if mode == "contig" or mode == "both" :
-	    if os.path.isfile("p_ctg.fa") == True and os.path.isfile("ctg_paths") == True : 
+	    if os.path.isfile("p_ctg.fa") == True and os.path.isfile("ctg_paths") == True and os.path.isfile("utg_data") == True : 
 	        return True
 	    else :
 		print 
-		print "ERROR! Please make sure p_ctg.fa and ctg_paths are in this directory"
+		print "ERROR! Please make sure utg_data, p_ctg.fa and ctg_paths are in this directory"
 		print 
 		return False 
         return True
     else : 
         print
-        print "ERROR! Please make sure sg_edges_list, preads4falcon.fasta, ctg_paths and p_ctg.fa are in this directory"
+        print "ERROR! Please make sure sg_edges_list, preads4falcon.fasta, utg_data, ctg_paths and p_ctg.fa are in this directory"
         print
         return False        
 
 
 # converts multiline preads4falcon.fasta into a single line fasta
+# also saves each read length into read_len_dict
 def convert_multiline_to_single_line_FASTA () :
     sequences = [] 
     input_handle = open("preads4falcon.fasta", "rU")
 
     for record in SeqIO.parse(input_handle, "fasta"):
 	sequences.append(record)
-    
+        global read_len_dict
+        read_len_dict[record.id] = len(record.seq)
+        record_complement = (record.id)+"'"
+        read_len_dict[record_complement] = len(record.seq)   
     output_handle = open("formatted_preads4falcon.fasta","w")
     fasta_out = FastaIO.FastaWriter(output_handle, wrap=None)
     fasta_out.write_file(sequences)
@@ -83,7 +87,9 @@ def create_read_pair_tuples () :
     list_of_tuples.sort()	    
 
 
-# these are all the ctgs for which you actually have the sequence in p_ctg.fa
+# saves each contig seen in p_ctg.fa. Will be used later while building fastg file
+# important because many contigs like 00R are not found in p_ctg.fa
+# so we need to change the name of such contigs to 00F'
 def create_p_ctg_names_set () :
     p_ctg_name_list = []
     p_ctg_headers_list = []
@@ -102,6 +108,7 @@ def create_p_ctg_names_set () :
 
 # extract headers from ctg_paths, and converts it into a dictionary
 # of the form [ctg_name] : {ctg_start_read, ctg_end_read}
+# converts names such as 00R to 00F' (only if not seen in p_ctg.fa)
 def create_contig_dict () :
     ctg_headers_list = []
     fp_ctg = open ("ctg_paths")
@@ -113,6 +120,8 @@ def create_contig_dict () :
         ctg_start_node = (row[2].split("~"))[0]
         ctg_end_node = row[3]
         ctg_type = str(row[1])
+        utg_path_in_ctg = str(row[6])
+        ctg_len = str(row[4]) 
         if ctg_type == "ctg_linear" :
             if ctg_name not in p_ctg_names_set : 
                 if ctg_name[-1] == "R":
@@ -128,11 +137,13 @@ def create_contig_dict () :
         all_ctg_list.append(ctg_name)
         contigs[ctg_name].append(ctg_start_node)
         contigs[ctg_name].append(ctg_end_node)         
-          
-              
-# collapses multiple tuples into a dictionary
-# key is the first entry in a tuple; each key represents "Source" node
-# value(s) is(are) the second entry(entries) in tuple(s); are the "Sink" nodes
+        contigs[ctg_name].append(utg_path_in_ctg)  
+        contigs[ctg_name].append(ctg_len)
+
+       
+# collapses multiple read pair tuples into a dictionary called 'follows'
+# in "follows", key is first entry of tuple; each key represents "Source" node
+# value(s) is(are) the second entry(entries) in tuple(s) => the "Sink" nodes
 def make_read_connections () :
     for pair in list_of_tuples :
 	start_node_location = pair[0][-1] 
@@ -180,7 +191,7 @@ def ovlp_exists(curr_node, tgt_node) :
     return False
 
 
-# this function creates a ctg_follows dictionary
+# this function creates a 'ctg_follows' dictionary
 # key is the ctg, value(s) is (are) its successor(s)
 def make_contig_connections() :  
     count = 0
@@ -213,14 +224,15 @@ def make_contig_connections() :
 # used by make_fastg() to provide padding for the header
 def headerify (node) :
     if node[-1] == "'" :
-        return str("NODE_"+node[:-1]+"_length_"+"500"+"_cov_50'")
+        return str("NODE_"+node[:-1]+"_length_"+node_length+"_cov_"+read_density+"'")
     else :
-        return str("NODE_"+node+"_length_"+"500"+"_cov_50")
+        return str("NODE_"+node+"_length_"+node_length+"_cov_"+read_density)
 
 
-# calls headerify() on 'follows' dictionary
-# makes the first part of FASTG file which has nodes with overlaps 
+# calls headerify() on 'follows' or 'ctg_follows' dictionary
+# makes first part of FASTG file which has read_to_read or ctg_to_ctg overlap 
 def make_fastg(node_mode) :
+    global node_length
     if node_mode == "read" :
 	dict_ = follows
         idx = Fasta('formatted_preads4falcon.fasta')
@@ -229,13 +241,21 @@ def make_fastg(node_mode) :
         idx = Fasta('p_ctg.fa')
     for source, sinks in dict_.items() : 
 	if node_mode == "read" :
-	    all_source_nodes.append(source)	    
+	    all_source_nodes.append(source)
+            node_length = str(read_len_dict[source])	    
         else :
-	    all_ctg_source_nodes.append(source)	
+	    all_ctg_source_nodes.append(source)
+            node_length = str(contigs[source][3])
+            global read_density
+            read_density = read_density_in_ctg(source)	
 	header = []
         header.append(">"+headerify(source)+":")
         for element in sinks :
-	    header.append(headerify(element)+",")
+	    if node_mode == "read" :
+                node_length = str(read_len_dict[element])   
+            elif node_mode == "contig" :
+                node_length = str(contigs[element][3])
+            header.append(headerify(element)+",")
         str_header = ''.join(header)
 	sys.stdout.write(str_header[:-1]+';')
         print
@@ -249,6 +269,7 @@ def make_fastg(node_mode) :
 
 # makes the second part of FASTG file which has fwd nodes without overlaps
 def print_non_ovlp_sources(node_mode) :
+    global node_length
     if node_mode == "read" :
         fp_non = open("formatted_preads4falcon.fasta")
     else :
@@ -258,12 +279,16 @@ def print_non_ovlp_sources(node_mode) :
 	if line[0] == ">" :
             if node_mode == "read" :
 	        record_name = line[1:-1]
-		nodes_with_overlaps = all_source_nodes
+ 		nodes_with_overlaps = all_source_nodes
+                node_length = str(read_len_dict[record_name])
 	    else :
 		record_name = line.split(" ")[0][1:]
 		nodes_with_overlaps = all_ctg_source_nodes
+                node_length = str(contigs[record_name][3])
+                global read_density 
+                read_density = read_density_in_ctg(record_name)
 	    if record_name not in nodes_with_overlaps :
-		sys.stdout.write(">NODE_"+record_name+"_length_"+"500"+"_cov_50;")
+		sys.stdout.write(">NODE_"+record_name+"_length_"+node_length+"_cov_"+read_density+";")
 		print
 		NON_flag = "non_source"
 	    else :  
@@ -276,6 +301,7 @@ def print_non_ovlp_sources(node_mode) :
 
 # makes the third part of FASTG file which has revcomp nodes without overlaps
 def print_non_ovlp_sources_complement(node_mode) :
+    global node_length
     if node_mode == "read" :
         fp_non = open("formatted_preads4falcon.fasta")
     else :
@@ -286,11 +312,15 @@ def print_non_ovlp_sources_complement(node_mode) :
 	    if node_mode == "read" :
 		record_name = str(line[1:-1]+"'")
 	        nodes_with_overlaps = all_source_nodes
+                node_length = str(read_len_dict[record_name])
 	    else :
 		record_name = str(line.split(" ")[0][1:]+"'")
 	        nodes_with_overlaps = all_ctg_source_nodes
+                node_length = str(contigs[record_name][3])
+                global read_density 
+                read_density = read_density_in_ctg(record_name)
 	    if record_name not in nodes_with_overlaps :
-		sys.stdout.write(">NODE_"+record_name[:-1]+"_length_"+"500"+"_cov_50';")
+		sys.stdout.write(">NODE_"+record_name[:-1]+"_length_"+node_length+"_cov_"+read_density+"';")
                 print
 		NON_flag = "non_source"
 	    else :
@@ -304,8 +334,63 @@ def print_non_ovlp_sources_complement(node_mode) :
     fp_non.close() 
 
 
+# creates a unitig dictionary, with key as a tuple of (start, via, end) nodes
+# values are a list of reads that make up that unitig (last column of utg_data) 
+def create_utg_dict () :
+    utg_headers_list = []
+    utg_composed = [] 
+    fp_utg = open ("utg_data")
+    for line in fp_utg :
+        utg_headers_list.append(line)
+    utg_headers = csv.reader(utg_headers_list, delimiter=' ', skipinitialspace=True)
+    for row in utg_headers :
+        utg_start_node = row[0]
+        utg_via_node = row[1]
+        utg_end_node = row[2]
+        utg_type = str(row[3])
+        utg_composed = row[6].split("|")
+        for utg in utg_composed :
+            for read in utg.split("~") :
+                unitigs[utg_start_node, utg_via_node, utg_end_node].append(read)
+
+
+# takes a unitig key (tuple of start, via, end node) as input
+# returns a list of reads that make up that utg 
+def reads_in_utg (start, via, end) :
+    reads = []
+    for entry in unitigs :
+        if entry[0] == start and entry[1] == via and entry[2] == end :
+            for read in (unitigs[entry]) :
+                reads.append(read)
+    return reads
+     
+# takes a contig as input and returns 'read density' of that contig
+def read_density_in_ctg (ctg_name) :
+    all_reads_len = 0
+    read_count = 0
+    ctg_reads = []
+    utgs = []
+    read_list = []
+    read_set = set ()
+    utg_paths = contigs[ctg_name][2]
+    for utg in utg_paths.split("|") :
+        utgs.append(utg)    
+    for utg in utgs :
+        reads = utg.split("~")
+        ctg_reads.append(reads_in_utg(reads[0], reads[1], reads[2]))    
+    for read_group in ctg_reads :
+        for read in read_group :
+            read_list.append(read)
+    read_set = set(read_list)
+    for node in read_set :
+        read = node[:-2]
+        all_reads_len += read_len_dict[read]     
+    ctg_len = int(contigs[ctg_name][3])
+    read_dense = str(float(all_reads_len/ctg_len))
+    return str(read_dense) 
+
+
 if __name__ == "__main__": 
-    #print "Mode is : ", mode 
     if check_files_exist() == True :
         convert_multiline_to_single_line_FASTA ()
         create_read_pair_tuples()
@@ -318,6 +403,7 @@ if __name__ == "__main__":
 	    sys.stdout.close() 
         if mode == "contig" or mode == "both":
 	    sys.stdout = open('contigs.fastg','w')	
+            create_utg_dict()
             create_p_ctg_names_set()
             create_contig_dict()
             make_contig_connections()

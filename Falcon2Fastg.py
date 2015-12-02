@@ -28,7 +28,7 @@ read_len_dict = defaultdict(int)
 
 
 parser = argparse.ArgumentParser(description='Falcon2Fastg converts FALCON output to FASTG format')
-parser.add_argument('--only-output', help='Only output either "reads", "contigs" or "both"', required=False)
+parser.add_argument('--only-output', help='Only output either "reads" or "contigs". Defaults to both reads and contigs', required=False)
 args = vars(parser.parse_args())
 
 if args['only_output'] == 'reads' :

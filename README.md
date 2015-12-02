@@ -99,7 +99,7 @@ The contig below is colored red and has more reads within it. Its read density i
 ![Alt text](/img/read_density_schematic.png?raw=true "Read Density schematic")
 
 
-The figure below is the visualization of the same D. mel. contigs with colors representing read density. 
+The figure below is a visualization of contigs from an assembly of Drosophila Melanogaster, with colors representing read density (red=higher, black=lower) 
 
 ![Alt text](/img/Dmel_ctgs_rd.png?raw=true "D. mel. contigs after Bandage")
 

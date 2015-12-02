@@ -13,9 +13,12 @@ the following input files:
 
 * sg_edges_list 
 
+* utg_data (if `--only-output` is unset, or set to `contigs`)
+
 * ctg_paths (if `--only-output` is unset, or set to `contigs`)
 
 * p_ctg.fa (if `--only-output` is unset, or set to `contigs`)
+
 
 
 ### Dependencies :
@@ -76,13 +79,27 @@ Falcon2Fastg can also be used to visualize the contigs produced by FALCON, and o
 To test this visualization mode, we assembled Drosophila melanogaster reads available at 
 (https://github.com/PacificBiosciences/DevNet/wiki/Drosophila-sequence-and-assembly). The FALCON assembly parameters were not optimized, and the final p_ctgs.fa file had 642 contigs with total length ~27 Mbp.  
 
-Execution of Falcon2Fastg took 2.5 minutes on a desktop computer (size of ``preads4falcon.fasta``: 2.1 GB).
+Execution of Falcon2Fastg took 5 minutes on a desktop computer (size of ``preads4falcon.fasta``: 2.1 GB).
 
-The figure below is the visualization of these D. mel. contigs.
+The figure below is the visualization of these D. mel. contigs (colors are random)
 
 ![Alt text](/img/Dmel_ctgs.png?raw=true "D. mel. contigs after Bandage")
 
 
+### Read density 
+
+Read density is calculated as (sum of length of all reads used in contig / 
+length of contig). Different read density can be used to distinguish between 
+different contigs  
+
+The figure below is the visualization of the same D. mel. contigs with colors representing read density. 
+
+![Alt text](/img/Dmel_ctgs_rd.png?raw=true "D. mel. contigs after Bandage")
+
+Zooming in shows that bright red represents higher density (6.0x).
+Contigs colored black have a lower read density (2.0x) 
+
+![Alt text](/img/Dmel_ctgs_rd_zoom.png?raw=true "D. mel. contigs after Bandage")
 
 ### Memory Warning 
 
@@ -94,13 +111,20 @@ available memory.
 
 
 ### Caveats : 
+ 
+- Reads within "contained" unitigs are not used in the calculation of Read density. 
 
-Faked a constant coverage of "50" because Bandage expects coverage information
- in the FASTG record headers.
+- Read density is calculated by dividing total length of all reads in the contig 
+by length of each contig (obtained from ctg_paths). Depending on the orientation, 
+Falcon ignores either the first read or the last read while reporting a contig. 
+Due to this, in the contigs.fastg file, the forward and rev_comp entries might 
+have different read_densities and different lengths. 
 
-Length record in FASTG header set to a constant "500". However, this does not 
-seem to affect Bandage, which correctly calculates the read length
+Any large differences are mostly restricted to short contigs, when one very 
+long read at either extremity can affect the length of the contig. 
 
+- Read density is set to "1" for entries in reads.fastg, as this measure is 
+only relevant for contigs.fastg
 
 ### Testing :
 

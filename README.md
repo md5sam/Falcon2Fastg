@@ -37,6 +37,9 @@ Quick installation of dependencies:
 The output of the tool is two FASTG files (``reads.fastg`` and ``contigs.fastg``) that can be opened with 
 [Bandage](http://rrwick.github.io/Bandage/).
 
+Additionally, the tool produces a CSV file : ReadsInContigs.csv that can be loaded with Bandage. This labels the 
+reads according to the contigs that they are a part of, along with the mapping position within the contig. 
+
 ![Alt text](/img/Falcon2Fastg_after_bandage.png?raw=true "Falcon2Fastg after Bandage")
 
 

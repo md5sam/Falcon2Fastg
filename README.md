@@ -19,6 +19,7 @@ the following input files:
 
 * p_ctg.fa (if `--only-output` is unset, or set to `contigs`)
 
+* p_ctg_tiling_path (if `--only-output` is unset, or set to `contigs`)
 
 
 ### Dependencies :

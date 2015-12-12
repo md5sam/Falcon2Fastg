@@ -25,7 +25,8 @@ unitigs = defaultdict(list)
 read_density = "1"
 node_length = "1"
 read_len_dict = defaultdict(int)
-
+ovlp_len = defaultdict(int)
+read_assoc_ctgs = defaultdict(list)
 
 parser = argparse.ArgumentParser(description='Falcon2Fastg converts FALCON output to FASTG format')
 parser.add_argument('--only-output', help='Only output either "reads" or "contigs". Defaults to both reads and contigs', required=False)
@@ -43,11 +44,11 @@ else :
 def check_files_exist () :
     if os.path.isfile("preads4falcon.fasta") == True and os.path.isfile("sg_edges_list") == True :
 	if mode == "contig" or mode == "both" :
-	    if os.path.isfile("p_ctg.fa") == True and os.path.isfile("ctg_paths") == True and os.path.isfile("utg_data") == True : 
+	    if os.path.isfile("p_ctg_tiling_path") == True and os.path.isfile("p_ctg.fa") == True and os.path.isfile("ctg_paths") == True and os.path.isfile("utg_data") == True : 
 	        return True
 	    else :
 		print 
-		print "ERROR! Please make sure utg_data, p_ctg.fa and ctg_paths are in this directory"
+		print "ERROR! Please make sure p_ctg_tiling_path, utg_data, p_ctg.fa and ctg_paths are in this directory"
 		print 
 		return False 
         return True
@@ -84,6 +85,8 @@ def create_read_pair_tuples () :
 	    if row[-1] == "G" :
                 read_pair_tuple = ((row[0]),(row[1]))
                 list_of_tuples.append(read_pair_tuple)
+		global ovlp_len
+		ovlp_len[read_pair_tuple] = int(row[5])
     list_of_tuples.sort()	    
 
 
@@ -390,6 +393,59 @@ def read_density_in_ctg (ctg_name) :
     return str(read_dense) 
 
 
+# creates a CSV file that looks like ReadNode,CtgBelongs,MapPosition
+def create_readgraph_csv () :
+    print "ReadNode"+","+"CtgBelongs"+":"+"MapPosition"
+    with open("p_ctg_tiling_path") as tilings:
+        tiling_lines = csv.reader(tilings, delimiter=' ')
+	first_line = True
+	new_contig = False
+	MapPos = 0
+	global read_assoc_ctgs
+	curr_ctg = curr_start_read_node = curr_end_read_node = curr_start_read = curr_end_read = "none"
+        for row in tiling_lines :
+	    if first_line == False :
+		prev_ctg = curr_ctg
+	        prev_start_read_node = curr_start_read_node
+	        prev_start_read = curr_start_read
+	        prev_end_read_node = curr_end_read_node
+	        prev_end_read = curr_end_read
+	    curr_ctg = row[0]
+	    curr_start_read_node = row[1]
+	    curr_start_read = curr_start_read_node[:-2]
+	    curr_end_read_node = row[2] 
+	    curr_end_read = curr_end_read_node[:-2]
+	    if first_line == True :
+		prev_ctg = curr_ctg
+		prev_start_read_node = curr_start_read_node	
+		prev_start_read = curr_start_read
+	        prev_end_read_node = curr_end_read_node
+		prev_end_read = curr_end_read
+	    if first_line == False :
+	        read_assoc_ctgs[prev_start_read].append(prev_ctg+":"+str(MapPos))
+	        if curr_ctg != prev_ctg :
+		    new_contig = True	
+	            MapPos = MapPos + read_len_dict[curr_start_read] - ovlp_len[(curr_start_read_node,curr_end_read_node)]	    
+		    read_assoc_ctgs[prev_end_read].append(prev_ctg+":"+str(MapPos))    
+		if new_contig == True :
+		    MapPos = 0
+		    new_contig = False
+	        else :
+		    MapPos = MapPos + read_len_dict[prev_start_read] - ovlp_len[(prev_start_read_node,curr_start_read_node)]    
+            first_line = False		   
+    read_assoc_ctgs[curr_start_read].append(curr_ctg+":"+str(MapPos)) 
+    MapPos = MapPos + read_len_dict[curr_start_read] - ovlp_len[(prev_start_read_node,curr_start_read_node)]
+    read_assoc_ctgs[curr_end_read].append(curr_ctg+":"+str(MapPos))
+
+    for k,v in read_assoc_ctgs.iteritems() :
+	if k!="none" :
+	    print str(k)+","+'_'.join(map(str,v))
+
+
+
+
+
+
 if __name__ == "__main__": 
     if check_files_exist() == True :
         convert_multiline_to_single_line_FASTA ()
@@ -411,4 +467,11 @@ if __name__ == "__main__":
             print_non_ovlp_sources("contig")
 	    print_non_ovlp_sources_complement("contig")
 	    sys.stdout.close()
+	    sys.stdout = open('ReadsInContigs.csv','w')
+            create_readgraph_csv()
+            sys.stdout.close()
+
+
+
+
 

@@ -79,10 +79,13 @@ def convert_multiline_to_single_line_FASTA () :
 
 # creates a tuple for every "G" pair in sg_edges_list
 def create_read_pair_tuples () :
+    read_pairs_list = []
     with open("sg_edges_list") as sg_entries:
-        read_pairs_TMI = csv.reader(sg_entries, delimiter=' ')
-        for row in read_pairs_TMI :
-	    if row[-1] == "G" :
+        for line in sg_entries :
+            read_pairs = line.strip().split()
+            read_pairs_list.append(read_pairs)
+        for row in read_pairs_list :
+            if row[-1] == "G" :
                 read_pair_tuple = ((row[0]),(row[1]))
                 list_of_tuples.append(read_pair_tuple)
 		global ovlp_len

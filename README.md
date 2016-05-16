@@ -6,8 +6,10 @@ This software converts the results of PacBio assembly using [FALCON](https://git
 
     python Falcon2Fastg.py [--only-output=reads|contigs]
 
-Run it in the output directory of FALCON assembly (2-asm-falcon). It needs 
-the following input files:
+This can be run in the output directory of FALCON assembly (2-asm-falcon). 
+Please make sure to copy the preads4falcon.fasta file from the intermediate directory (1-preads_ovl) to the output directory (2-asm-falcon)
+
+Falcon2Fastg needs the following 6 input files:
 
 * preads4falcon.fasta
 
